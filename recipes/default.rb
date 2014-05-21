@@ -7,6 +7,7 @@
 
 group_name = node[:td_agent][:group]
 user_name = node[:td_agent][:user]
+install_dir = node[:td_agent][:install_dir]
 
 group group_name do
   action :create
@@ -18,40 +19,24 @@ user user_name do
   action  :create
 end
 
-directory '/etc/td-agent/' do
+directory install_dir do
   owner user_name
   group group_name
   mode '0755'
   action :create
 end
 
-case node['platform']
-when "ubuntu"
-  dist = node['lsb']['codename']
-  source = (dist == 'precise') ? "http://packages.treasure-data.com/precise/" : "http://packages.treasure-data.com/debian/"
-  apt_repository "treasure-data" do
-    uri source
-    distribution dist
-    components ["contrib"]
-    action :add
-  end
-when "centos", "redhat"
-  yum_repository "treasure-data" do
-    url "http://packages.treasure-data.com/redhat/$basearch"
-    gpgkey "http://packages.treasure-data.com/redhat/RPM-GPG-KEY-td-agent"
-    action :add
-  end
+# all config file will be in conf.d folder
+# and to be clear we always use include in the main config
+directory "#{install_dir}/conf.d" do
+  mode "0755"
 end
 
-template "/etc/td-agent/td-agent.conf" do
+include_recipe 'td-agent::package'
+
+template "#{install_dir}/td-agent.conf" do
   mode "0644"
   source "td-agent.conf.erb"
-end
-
-if node['td_agent']['includes']
-  directory "/etc/td-agent/conf.d" do
-    mode "0755"
-  end
 end
 
 package "td-agent" do
@@ -75,6 +60,27 @@ node[:td_agent][:plugins].each do |plugin|
   elsif plugin.is_a?(String)
     td_agent_gem plugin do
       plugin true
+    end
+  end
+end
+
+if node[:td_agent][:source]
+  node[:td_agent][:source].each do |config|
+    template "#{config[:tag]}" do
+      path      "/etc/fluent/config.d/source_#{config[:tag]}.conf"
+      source    "plugin_source.conf.erb"
+      variables config
+      notifies :restart, "service[fluent]", :immediately
+    end
+  end
+
+  node[:fluentd][:configs][:match].each do |config|
+    cfg = config.dup
+    template "#{cfg[:match]}" do
+      path      "/etc/fluent/config.d/match_#{cfg[:match]}.conf"
+      source    "plugin_match.conf.erb"
+      variables({ :match => cfg.delete(:match), :type => cfg.delete(:type), :attributes => cfg })
+      notifies :restart, "service[fluent]", :immediately
     end
   end
 end

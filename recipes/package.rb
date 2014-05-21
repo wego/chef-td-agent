@@ -1,0 +1,31 @@
+#
+# Cookbook Name:: td-agent
+# Recipe:: default
+#
+# Copyright 2011, Treasure Data, Inc.
+#
+
+package_source_base_url = 'http://packages.treasure-data.com'
+
+case node[:platform]
+when 'ubuntu'
+  dist = node[:lsb][:codename]
+  package_source = if dist == 'precise'
+    "#{package_source_base_url}/precise/"
+  else
+    "#{package_source_base_url}/debian/"
+  end
+
+  apt_repository 'treasure-data' do
+    uri package_source
+    distribution dist
+    components ['contrib']
+    action :add
+  end
+when 'centos', 'redhat'
+  yum_repository 'treasure-data' do
+    url "#{package_source_base_url}/redhat/$basearch"
+    gpgkey "#{package_source_base_url}/redhat/RPM-GPG-KEY-td-agent"
+    action :add
+  end
+end

@@ -1,5 +1,6 @@
 default[:td_agent][:user] = 'root'
 default[:td_agent][:group] = 'root'
+default[:td_agent][:install_dir] = '/etc/td-agent/'
 
 default[:td_agent][:api_key] = ''
 

@@ -92,18 +92,6 @@ This installs the latest version of +aws-sdk+
       plugin false
     end
 
-== includes
-
-Optionally include /etc/td-agent/conf.d/*.conf files (i.e. symlinks, other recipes, etc.)
-
-- node[:td_agent][:includes] = false
-
-== default_config
-
-Optionally prevent /etc/td-agent/td-agent.conf from including default config.
-
-- node[:td_agent][:default_config] = true
-
 = USAGE:
 
 This is an example role file.

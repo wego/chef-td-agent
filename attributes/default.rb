@@ -1,3 +1,6 @@
+default[:td_agent][:user] = 'root'
+default[:td_agent][:group] = 'root'
+
 default[:td_agent][:api_key] = ''
 
 default[:td_agent][:plugins] = []

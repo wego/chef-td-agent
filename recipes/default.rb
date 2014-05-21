@@ -5,27 +5,23 @@
 # Copyright 2011, Treasure Data, Inc.
 #
 
-group 'td-agent' do
-  group_name 'td-agent'
-  gid        403
-  action     [:create]
+group_name = node[:td_agent][:group]
+user_name = node[:td_agent][:user]
+
+group group_name do
+  action :create
 end
 
-user 'td-agent' do
+user user_name do
   comment  'td-agent'
-  uid      403
-  group    'td-agent'
-  home     '/var/run/td-agent'
-  shell    '/bin/false'
-  password nil
-  supports :manage_home => true
-  action   [:create, :manage]
+  gid  group_name
+  action  :create
 end
 
 directory '/etc/td-agent/' do
-  owner  'td-agent'
-  group  'td-agent'
-  mode   '0755'
+  owner user_name
+  group group_name
+  mode '0755'
   action :create
 end
 

@@ -23,9 +23,9 @@ This cookbook has these external dependencies.
 
 == api_key
 
-API Key, and the Secret Key are required.
+API Key is required if you want to use TD's service
 
-- node[:td_agent][:api_key] (required)
+- node[:td_agent][:api_key]
 
 == plugins
 

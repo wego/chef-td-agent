@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: td-agent
-# Recipe:: default
+# Recipe:: package
 #
 # Copyright 2011, Treasure Data, Inc.
 #

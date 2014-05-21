@@ -32,7 +32,7 @@ directory "#{install_dir}/conf.d" do
   mode "0755"
 end
 
-include_recipe 'td-agent::package'
+include_recipe 'td-agent::install_from_package'
 
 template "#{install_dir}/td-agent.conf" do
   mode "0644"

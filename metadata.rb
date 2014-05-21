@@ -13,8 +13,3 @@ end
 
 depends 'apt'
 depends 'yum'
-
-attribute "td_agent/api_key",
-  :display_name => "Treasure Data ApiKey",
-  :description => "ApiKey for Treasure Data Service",
-  :default => ''

@@ -55,28 +55,27 @@ node[:td_agent][:plugins].each do |plugin|
   end
 end
 
-if node[:td_agent][:source]
-  node[:td_agent][:source].each do |config|
-    template "#{config[:tag]}" do
-      path      "/etc/fluent/config.d/source_#{config[:tag]}.conf"
-      source    "plugin_source.conf.erb"
-      variables config
-      notifies :restart, "service[fluent]", :immediately
-    end
-  end
+service "td-agent" do
+  action [ :enable, :start ]
+  subscribes :restart, resources(:template => "#{install_dir}/td-agent.conf")
+end
 
-  node[:td_agent][:match].each do |config|
-    cfg = config.dup
-    template "#{cfg[:match]}" do
-      path      "/etc/fluent/config.d/match_#{cfg[:match]}.conf"
-      source    "plugin_match.conf.erb"
-      variables({ :match => cfg.delete(:match), :type => cfg.delete(:type), :attributes => cfg })
-      notifies :restart, "service[fluent]", :immediately
-    end
+node[:td_agent][:source] && node[:td_agent][:source].each do |config|
+  template "#{config[:tag]}" do
+    path      "#{install_dir}/conf.d/source_#{config[:tag]}.conf"
+    source    "plugin_source.conf.erb"
+    variables config
+    notifies :restart, "service[td-agent]", :immediately
   end
 end
 
-service "td-agent" do
-  action [ :enable, :start ]
-  subscribes :restart, resources(:template => "/etc/td-agent/td-agent.conf")
+
+node[:td_agent][:match] && node[:td_agent][:match].each do |config|
+  cfg = config.dup
+  template "#{cfg[:match]}" do
+    path      "#{install_dir}/conf.d/match_#{cfg[:match]}.conf"
+    source    "plugin_match.conf.erb"
+    variables({ :match => cfg.delete(:match), :type => cfg.delete(:type), :attributes => cfg })
+    notifies :restart, "service[td-agent]", :immediately
+  end
 end

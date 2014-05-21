@@ -28,7 +28,7 @@ end
 
 # all config file will be in conf.d folder
 # and to be clear we always use include in the main config
-directory "#{install_dir}/conf.d" do
+directory "#{install_dir}/conf" do
   mode "0755"
 end
 
@@ -62,7 +62,7 @@ end
 
 node[:td_agent][:source] && node[:td_agent][:source].each do |config|
   template "#{config[:tag]}" do
-    path      "#{install_dir}/conf.d/source_#{config[:tag]}.conf"
+    path      "#{install_dir}/conf/source_#{config[:tag]}.conf"
     source    "plugin_source.conf.erb"
     variables config
     notifies :restart, "service[td-agent]", :immediately
@@ -73,7 +73,7 @@ end
 node[:td_agent][:match] && node[:td_agent][:match].each do |config|
   cfg = config.dup
   template "#{cfg[:match]}" do
-    path      "#{install_dir}/conf.d/match_#{cfg[:match]}.conf"
+    path      "#{install_dir}/conf/match_#{cfg[:match]}.conf"
     source    "plugin_match.conf.erb"
     variables({ :match => cfg.delete(:match), :type => cfg.delete(:type), :attributes => cfg })
     notifies :restart, "service[td-agent]", :immediately

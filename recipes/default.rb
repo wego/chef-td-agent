@@ -45,7 +45,7 @@ package "td-agent" do
     "default" => nil
     )
   action :upgrade
-  version node[:td_agent][:version] if node[:td_agent][:pinning_version]
+  version node[:td_agent][:version] if node[:td_agent][:version]
 end
 
 node[:td_agent][:plugins].each do |plugin|

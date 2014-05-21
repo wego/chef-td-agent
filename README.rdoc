@@ -42,16 +42,15 @@ This installs the latest version of +fluent-plugin-flowcounter+ and version 0.0.
       { "rewrite" => { "version" => "0.0.9" } }
     ]
 
-== pinning_version and version
+== version
 
-If `pinning_version` is true, then `versoin`s td-agent will be installed. The default `version` is latest version.
+If `version` is provided, then `version`s td-agent will be installed. The default `version` is latest version.
 
-- node[:td_agent][:pinning_version]
 - node[:td_agent][:version]
 
 === Limitation
 
-`pinning_version` and `version` attributes are now available for `rpm` package.
+`version` attributes are now available for `rpm` package.
 The td-agent repository now use `reprepro` for building Deb repository.
 `reprepro` can not handle multiple versions of the same package.
 

@@ -65,7 +65,7 @@ if node[:td_agent][:source]
     end
   end
 
-  node[:fluentd][:configs][:match].each do |config|
+  node[:td_agent][:match].each do |config|
     cfg = config.dup
     template "#{cfg[:match]}" do
       path      "/etc/fluent/config.d/match_#{cfg[:match]}.conf"

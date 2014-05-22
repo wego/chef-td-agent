@@ -1,7 +1,5 @@
 <source>
-     type      <%= @type %>
-     format    <%= @format %>
-     path      <%= @path %>
-     pos_file  <%= @pos_file %>
-     tag       <%= @tag %>
+  <% @attributes.each do |key, value| %>
+  <%= key %>     <%= value %>
+  <% end %>
 </source>

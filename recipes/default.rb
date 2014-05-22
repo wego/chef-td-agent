@@ -60,22 +60,20 @@ service "td-agent" do
   subscribes :restart, resources(:template => "#{install_dir}/td-agent.conf")
 end
 
-node[:td_agent][:source] && node[:td_agent][:source].each do |config|
-  template "#{config[:tag]}" do
-    path      "#{install_dir}/conf/source_#{config[:tag]}.conf"
+node[:td_agent][:sources] && node[:td_agent][:sources].each do |key, attributes|
+  template key do
+    path      "#{install_dir}/conf/source_#{key}.conf"
     source    "plugin_source.conf.erb"
-    variables config
+    variables({ :attributes => attributes })
     notifies :restart, "service[td-agent]", :immediately
   end
 end
 
-
-node[:td_agent][:match] && node[:td_agent][:match].each do |config|
-  cfg = config.dup
-  template "#{cfg[:match]}" do
-    path      "#{install_dir}/conf/match_#{cfg[:match]}.conf"
+node[:td_agent][:matches] && node[:td_agent][:matches].each do |key, attributes|
+  template key do
+    path      "#{install_dir}/conf/match_#{key}.conf"
     source    "plugin_match.conf.erb"
-    variables({ :match => cfg.delete(:match), :type => cfg.delete(:type), :attributes => cfg })
+    variables({:attributes => attributes})
     notifies :restart, "service[td-agent]", :immediately
   end
 end

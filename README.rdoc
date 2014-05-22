@@ -104,11 +104,9 @@ This is an example role file.
       "recipe[td-agent]",
     )
     override_attributes(
-      # for td-agent
       :td_agent => {
-        :api_key => 'foo_bar_buz',
         :plugins => [
           'rewrite'
         ]
-      }
+      },
     )

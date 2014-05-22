@@ -94,19 +94,33 @@ This installs the latest version of +aws-sdk+
 
 = USAGE:
 
-This is an example role file.
+This is an example config:
 
-    name "base"
-    description "base server role."
-    run_list(
-      "recipe[apt]",
-      "recipe[yum]",
-      "recipe[td-agent]",
-    )
-    override_attributes(
-      :td_agent => {
-        :plugins => [
-          'rewrite'
-        ]
-      },
-    )
+  "run_list": [
+    "recipe[td-agent]"
+  ],
+  "td_agent": {
+    "sources": {
+      "default": {
+        "type": "tail",
+        "path": "/var/log/httpd-access.log",
+        "pos_file": "/var/log/td-agent/httpd-access.log.pos",
+        "tag": "hoteru.production"
+      }
+    },
+    "matches": {
+      "s3": {
+        "pattern": "hoteru.*",
+        "type": "s3",
+        "aws_key_id": "YOUR_AWS_KEY_ID",
+        "aws_sec_key": "YOUR_AWS_SECRET",
+        "s3_bucket": "YOUR_S3_BUCKET_NAME",
+        "s3_endpoint": "s3-us-west-1.amazonaws.com",
+        "path": "logs/",
+        "buffer_path": "/var/log/fluent/s3",
+        "time_slice_format": "%Y%m%d%H",
+        "time_slice_wait": "10m",
+        "utc": "",
+        "buffer_chunk_limit": "256m"
+      }
+    }

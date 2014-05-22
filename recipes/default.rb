@@ -16,11 +16,7 @@ end
 user user_name do
   comment  'td-agent'
   gid      group_name
-  home     '/var/run/td-agent'
-  shell    '/bin/false'
-  password nil
-  supports :manage_home => true
-  action   [:create, :manage]
+  action   :create
 end
 
 directory install_dir do
@@ -28,11 +24,6 @@ directory install_dir do
   group group_name
   mode '0755'
   action :create
-end
-
-directory '/var/log/td-agent' do
-  owner user_name
-  group group_name
 end
 
 # all config file will be in conf.d folder
@@ -62,6 +53,11 @@ node[:td_agent][:plugins].each do |plugin|
       plugin true
     end
   end
+end
+
+template '/etc/init.d/td-agent' do
+  mode "0755"
+  source 'td-agent.init_d.erb'
 end
 
 service "td-agent" do

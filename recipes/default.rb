@@ -15,8 +15,12 @@ end
 
 user user_name do
   comment  'td-agent'
-  gid  group_name
-  action  :create
+  gid      group_name
+  home     '/var/run/td-agent'
+  shell    '/bin/false'
+  password nil
+  supports :manage_home => true
+  action   [:create, :manage]
 end
 
 directory install_dir do
@@ -24,6 +28,11 @@ directory install_dir do
   group group_name
   mode '0755'
   action :create
+end
+
+directory '/var/log/td-agent' do
+  owner user_name
+  group group_name
 end
 
 # all config file will be in conf.d folder

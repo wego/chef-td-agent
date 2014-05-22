@@ -16,33 +16,39 @@ This cookbook has these external dependencies:
 
 == sources
 
-List of sources which will be added to config file and loaded when fluentd service started, for example:
+List of sources which will be added to config file and loaded when fluentd service started.
 
-- node[:td_agent][:sources] = {
-  "tail": {
-    "type": "tail",
-    "path": "/var/log/httpd-access.log",
-    "pos_file": "/var/log/td-agent/httpd-access.log.pos",
-    "tag": "hoteru.production"
-  },
-  "forward": {
-    "type": "forward",
-    "port": "24224",
-    "bind": "0.0.0.0"
-  }
-}
+- node[:td_agent][:sources]
+
+for example:
+    "sources": {
+      "tail": {
+        "type": "tail",
+        "path": "/var/log/httpd-access.log",
+        "pos_file": "/var/log/td-agent/httpd-access.log.pos",
+        "tag": "hoteru.production"
+      },
+      "forward": {
+        "type": "forward",
+        "port": "24224",
+        "bind": "0.0.0.0"
+      }
+    }
 
 == matches
 
-List of matches which will be added to config file and loaded when fluentd service started, for example:
+List of matches which will be added to config file and loaded when fluentd service started:
 
-- node[:td_agent][:matches] = {
-  "match_name": {
-    "pattern": "myapp.access",
-    "type": "file",
-    "path": "/var/log/fluent/access"
-  }
-}
+- node[:td_agent][:matches]
+
+for example:
+    "matches": {
+      "match_name": {
+        "pattern": "myapp.access",
+        "type": "file",
+        "path": "/var/log/fluent/access"
+      }
+    }
 
 == plugins
 

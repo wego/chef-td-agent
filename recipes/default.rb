@@ -81,7 +81,7 @@ node[:td_agent][:matches] && node[:td_agent][:matches].each do |key, attributes|
   end
 end
 
-if node[:td_agent][:sources].present? || node[:td_agent][:matches].present?
+if node[:td_agent][:sources] || node[:td_agent][:matches]
   service "td-agent" do
     action :restart
   end

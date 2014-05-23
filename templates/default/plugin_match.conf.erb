@@ -2,9 +2,11 @@
   <% @attributes.each do |key, value| -%>
   <% next if key == :pattern %>
   <% if value.is_a?(Hash) %>
+    <<%= key %>>
     <% value.each do |sub_key, sub_value| %>
       <%= sub_key -%>   <%= sub_value %>
     <% end %>
+    </<%= key %>>
   <% else %>
     <%= key -%>   <%= value %>
   <% end %>

@@ -1,6 +1,12 @@
 <match <%= @attributes[:pattern] %>>
   <% @attributes.each do |key, value| -%>
   <% next if key == :pattern %>
-  <%= key -%>     <%= value %>
+  <% if value.is_a?(Hash) %>
+    <% value.each do |sub_key, sub_value| %>
+      <%= sub_key -%>   <%= sub_value %>
+    <% end %>
+  <% else %>
+    <%= key -%>   <%= value %>
+  <% end %>
   <% end -%>
 </match>

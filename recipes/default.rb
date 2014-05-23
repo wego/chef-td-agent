@@ -70,7 +70,6 @@ node[:td_agent][:sources] && node[:td_agent][:sources].each do |key, attributes|
     path      "#{install_dir}/conf/source_#{key}.conf"
     source    "plugin_source.conf.erb"
     variables({ :attributes => attributes })
-    notifies :restart, "service[td-agent]", :immediately
   end
 end
 
@@ -79,6 +78,11 @@ node[:td_agent][:matches] && node[:td_agent][:matches].each do |key, attributes|
     path      "#{install_dir}/conf/match_#{key}.conf"
     source    "plugin_match.conf.erb"
     variables({:attributes => attributes})
-    notifies :restart, "service[td-agent]", :immediately
+  end
+end
+
+if node[:td_agent][:sources].present? || node[:td_agent][:matches].present?
+  service "td-agent" do
+    action :restart
   end
 end

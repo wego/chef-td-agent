@@ -1,6 +1,5 @@
-<match <%= @attributes[:pattern] %>>
+<match <%= @attributes.delete(:pattern) %>>
   <% @attributes.each do |key, value| -%>
-  <% next if key == :pattern %>
   <% if value.is_a?(Hash) %>
     <<%= key %>>
     <% value.each do |sub_key, sub_value| %>

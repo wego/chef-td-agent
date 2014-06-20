@@ -2,11 +2,11 @@
   <% @attributes.each do |key, value| -%>
   <% next if key.to_sym == :pattern %>
   <% if value.is_a?(Hash) %>
-    <<%= key %>>
+    <<%= (@attributes[:type] == 'copy') ? 'store' : key %>>
     <% value.each do |sub_key, sub_value| %>
       <%= sub_key -%>   <%= sub_value %>
     <% end %>
-    </<%= key %>>
+    </<%= (@attributes[:type] == 'copy') ? 'store' : key %>>
   <% else %>
     <%= key -%>   <%= value %>
   <% end %>

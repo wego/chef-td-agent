@@ -42,6 +42,10 @@ template "#{install_dir}/td-agent.conf" do
 end
 
 node[:td_agent][:plugins].each do |plugin|
+  if plugin == 'elasticsearch'
+    package 'curl'
+    package 'libcurl4-gnutls-dev'
+  end
   if plugin.is_a?(Hash)
     plugin_name, plugin_attributes = plugin.first
     td_agent_gem plugin_name do
@@ -78,9 +82,13 @@ end
 
 node[:td_agent][:matches] && node[:td_agent][:matches].each do |key, attributes|
   attributes = attributes.dup
-  if attributes[:type] == 's3' && attributes.delete(:encrypted_data_bag_aws_key)
+  if attributes.delete(:encrypted_data_bag_aws_key)
     aws_key = EncryptedDataBagItem.load("s3", "key")
-    attributes = attributes.merge(aws_key_id: aws_key['aws_access_key_id'], aws_sec_key: aws_key['aws_secret_access_key'])
+    if attributes[:type] == 's3'
+      attributes = attributes.merge(aws_key_id: aws_key['aws_access_key_id'], aws_sec_key: aws_key['aws_secret_access_key'])
+    elsif attributes[:store_s3] && attributes[:store_s3][:type] == 's3'
+      attributes[:store_s3] = attributes[:store_s3].merge(aws_key_id: aws_key['aws_access_key_id'], aws_sec_key: aws_key['aws_secret_access_key'])
+    end
   end
   template key do
     path      "#{install_dir}/conf/match_#{key}.conf"

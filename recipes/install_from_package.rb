@@ -5,7 +5,7 @@
 # Copyright 2011, Treasure Data, Inc.
 #
 
-package_source_base_url = 'http://packages.treasure-data.com'
+package_source_base_url = 'http://packages.treasuredata.com'
 
 case node[:platform]
 when 'ubuntu'
@@ -20,7 +20,7 @@ when 'ubuntu'
     uri package_source
     distribution dist
     components ['contrib']
-    key "http://packages.treasure-data.com/debian/RPM-GPG-KEY-td-agent"
+    key "http://packages.treasuredata.com/debian/RPM-GPG-KEY-td-agent"
     action :add
   end
 when 'centos', 'redhat', 'amazon'

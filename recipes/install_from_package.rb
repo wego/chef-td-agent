@@ -6,7 +6,7 @@
 #
 
 package_source_base_url = 'http://packages.treasuredata.com'
-
+package_gpgkey_url = "http://packages.treasuredata.com/GPG-KEY-td-agent"
 case node[:platform]
 when 'ubuntu'
   dist = node[:lsb][:codename]
@@ -20,13 +20,13 @@ when 'ubuntu'
     uri package_source
     distribution dist
     components ['contrib']
-    key "http://packages.treasuredata.com/debian/RPM-GPG-KEY-td-agent"
+    key package_gpgkey_url
     action :add
   end
 when 'centos', 'redhat', 'amazon'
   yum_repository 'treasure-data' do
     url "#{package_source_base_url}/redhat/$basearch"
-    gpgkey "#{package_source_base_url}/redhat/RPM-GPG-KEY-td-agent"
+    gpgkey package_gpgkey_url
     action :add
   end
 end

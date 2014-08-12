@@ -83,11 +83,11 @@ end
 node[:td_agent][:matches] && node[:td_agent][:matches].each do |key, attributes|
   attributes = attributes.dup
   if attributes.delete(:encrypted_data_bag_aws_key)
-    aws_key = EncryptedDataBagItem.load("s3", "key")
+    aws_key = EncryptedDataBagItem.load("aws", "s3-fluentd")
     if attributes[:type] == 's3'
-      attributes = attributes.merge(aws_key_id: aws_key['aws_access_key_id'], aws_sec_key: aws_key['aws_secret_access_key'])
+      attributes = attributes.merge(aws_key_id: aws_key['access_key_id'], aws_sec_key: aws_key['secret_access_key'])
     elsif attributes[:store_s3] && attributes[:store_s3][:type] == 's3'
-      attributes[:store_s3] = attributes[:store_s3].merge(aws_key_id: aws_key['aws_access_key_id'], aws_sec_key: aws_key['aws_secret_access_key'])
+      attributes[:store_s3] = attributes[:store_s3].merge(aws_key_id: aws_key['access_key_id'], aws_sec_key: aws_key['secret_access_key'])
     end
   end
   template key do

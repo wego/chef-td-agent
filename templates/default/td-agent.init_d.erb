@@ -22,7 +22,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 USER=<%= node[:td_agent][:user] %>                   # Running user
 GROUP=<%= node[:td_agent][:group] %>                  # Running group
 DESC=fluentd                   # Introduce a short description here
-PIDFILE=<%= node[:td_agent][:install_dir] %>/pid/$NAME.pid
+PIDFILE=<%= node[:td_agent][:pid_file] %>
 DAEMON=/usr/lib/fluent/ruby/bin/ruby # Introduce the server's location here
 # Arguments to run the daemon with
 DAEMON_ARGS="/usr/sbin/td-agent $DAEMON_ARGS --daemon $PIDFILE --log <%= node[:td_agent][:install_dir] %>/fluentd.log"

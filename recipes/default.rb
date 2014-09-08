@@ -100,15 +100,14 @@ node[:td_agent][:matches] && node[:td_agent][:matches].each do |key, attributes|
   end
 end
 
-# Rotate by size also as log can grow quickly on error
+# Rotate by size as log can grow quickly on error
 logrotate_app 'td-agent' do
   path           log_file
   rotate         3
-  frequency      'daily'
-  options        ['compress', 'dateext', 'delaycompress', 'missingok']
+  options        ['compress', 'delaycompress', 'missingok']
   create         "0644 #{user_name} #{group_name}"
   sharedscripts  true
-  size           '1024M'
+  size           '50M'
   lastaction     %Q(
     pid=#{pid_file}
     test -s $pid && kill -USR1 "$(cat $pid)"

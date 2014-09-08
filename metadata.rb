@@ -12,4 +12,5 @@ recipe           "td-agent", "td-agent configuration"
 end
 
 depends 'apt'
+depends 'logrotate'
 depends 'yum'

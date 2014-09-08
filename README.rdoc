@@ -10,6 +10,7 @@ NOTE: td-agent is open-sourced as {Fluentd project}[http://github.com/fluent/]. 
 This cookbook has these external dependencies:
 
 - apt cookbook
+- logrotate cookbook
 - yum cookbook
 
 = ATTRIBUTES:

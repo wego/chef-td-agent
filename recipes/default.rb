@@ -8,6 +8,8 @@
 group_name = node[:td_agent][:group]
 user_name = node[:td_agent][:user]
 install_dir = node[:td_agent][:install_dir]
+log_file = node[:td_agent][:log_file]
+pid_file = node[:td_agent][:pid_file]
 
 group group_name do
   action :create
@@ -96,4 +98,19 @@ node[:td_agent][:matches] && node[:td_agent][:matches].each do |key, attributes|
     variables({:attributes => attributes})
     notifies :restart, "service[td-agent]", :immediately
   end
+end
+
+# Rotate by size also as log can grow quickly on error
+logrotate_app 'td-agent' do
+  path           log_file
+  rotate         3
+  frequency      'daily'
+  options        ['compress', 'dateext', 'delaycompress', 'missingok']
+  create         "0644 #{user_name} #{group_name}"
+  sharedscripts  true
+  size           '1024M'
+  lastaction     %Q(
+    pid=#{pid_file}
+    test -s $pid && kill -USR1 "$(cat $pid)"
+  )
 end
